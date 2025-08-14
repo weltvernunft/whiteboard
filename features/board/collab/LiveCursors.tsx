@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef } from "react";
-import { useOthers } from "../collab/liveblocks";
+import { useOthers } from "./liveblocks";
 import Cursor from "./Cursor";
 
 const COLORS = [

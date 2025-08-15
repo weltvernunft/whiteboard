@@ -13,6 +13,7 @@ import { useSpacePan } from "../core/useSpacePan";
 import { useWheelZoomPan } from "../core/useWheelZoomPan";
 import { useCanvasResize } from "../core/useCanvasResize";
 import { useTouchGestures } from "../core/useTouchGestures";
+import { useClipboardImages } from "../core/useClipboardImages";
 
 export default function CanvasView() {
   const [{ tool }, updatePresence] = useMyPresence();
@@ -42,6 +43,7 @@ export default function CanvasView() {
   useWheelZoomPan(fabricRef, wrapRef);
   useCanvasResize(fabricRef, wrapRef);
   useTouchGestures(fabricRef, wrapRef, throttledUpdatePresence); // ← новый
+  useClipboardImages(fabricRef, wrapRef); // <-- Я обновил эту строку, чтобы передать wrapRef
 
   useCanvasKeyboard(fabricRef, handleUpdatePresence);
   useSpacePan(fabricRef, tool, wrapRef);

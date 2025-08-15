@@ -11,6 +11,9 @@ export function useCanvasKeyboard(
 ) {
   useEffect(() => {
     const onKeyDownEdit = (ev: KeyboardEvent) => {
+      // пропускаем Ctrl/⌘+V, иначе paste-ивент не прилетит
+      if ((ev.metaKey || ev.ctrlKey) && ev.key.toLowerCase() === "v") return;
+
       const target = ev.target as HTMLElement | null;
       const isTyping =
         !!target &&
@@ -23,12 +26,12 @@ export function useCanvasKeyboard(
 
       if (
         !isTyping &&
-        (ev.ctrlKey || ev.metaKey) &&
+        (ev.metaKey || ev.ctrlKey) &&
         ev.key.toLowerCase() === "a"
       ) {
         ev.preventDefault();
         f.isDrawingMode = false;
-        f.selection = true;
+        (f as any).selection = true;
         f.setCursor(CURSORS.select);
 
         const objects = f.getObjects();
@@ -66,10 +69,8 @@ export function useCanvasKeyboard(
       }
     };
 
-    window.addEventListener("keydown", onKeyDownEdit, { capture: true });
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDownEdit, { capture: true });
-    };
+    // БЕЗ capture
+    window.addEventListener("keydown", onKeyDownEdit);
+    return () => window.removeEventListener("keydown", onKeyDownEdit);
   }, [fabricRef, throttledUpdatePresence]);
 }

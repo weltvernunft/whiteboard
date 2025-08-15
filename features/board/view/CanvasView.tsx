@@ -43,8 +43,11 @@ export default function CanvasView() {
   useWheelZoomPan(fabricRef, wrapRef);
   useCanvasResize(fabricRef, wrapRef);
   useTouchGestures(fabricRef, wrapRef, throttledUpdatePresence); // ← новый
-  useClipboardImages(fabricRef, wrapRef); // <-- Я обновил эту строку, чтобы передать wrapRef
-
+  useClipboardImages(
+    fabricRef,
+    wrapRef,
+    () => updatePresence({ tool: "select", lastSeen: Date.now() }) // 👈 сюда
+  );
   useCanvasKeyboard(fabricRef, handleUpdatePresence);
   useSpacePan(fabricRef, tool, wrapRef);
 

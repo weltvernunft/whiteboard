@@ -1,4 +1,3 @@
-// features/board/core/useBoardShortcuts.ts
 "use client";
 import { useEffect } from "react";
 import { useMyPresence } from "../collab/liveblocks";
@@ -13,6 +12,8 @@ export default function useBoardShortcuts() {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      // 1) не трогаем системные сочетания
+      if (e.metaKey || e.ctrlKey) return;
       if (e.repeat || isEditable(e.target)) return;
 
       switch (e.code) {
@@ -32,14 +33,11 @@ export default function useBoardShortcuts() {
           break;
       }
     };
-    window.addEventListener("keydown", onKeyDown, { capture: true });
-    return () =>
-      window.removeEventListener(
-        "keydown",
-        onKeyDown as any,
-        { capture: true } as any
-      );
+
+    // БЕЗ capture
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [update]);
 
-  return tool; // если где-то нужно текущее значение
+  return tool;
 }
